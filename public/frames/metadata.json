@@ -1,0 +1,34 @@
+{
+  "sequences": [
+    {
+      "seqIndex": 0,
+      "frameCount": 240,
+      "name": "seq0"
+    },
+    {
+      "seqIndex": 1,
+      "frameCount": 240,
+      "name": "seq1"
+    },
+    {
+      "seqIndex": 2,
+      "frameCount": 240,
+      "name": "seq2"
+    },
+    {
+      "seqIndex": 3,
+      "frameCount": 240,
+      "name": "seq3"
+    },
+    {
+      "seqIndex": 4,
+      "frameCount": 240,
+      "name": "seq4"
+    },
+    {
+      "seqIndex": 5,
+      "frameCount": 240,
+      "name": "seq5"
+    }
+  ]
+}

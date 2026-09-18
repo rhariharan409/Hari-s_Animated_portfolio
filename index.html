@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Cinematic Portfolio</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Fullscreen canvas renderer for optimized cinematic scrubbing -->
+    <canvas id="cinematic-canvas"></canvas>
+
+    <!-- LAYER 2: Interactive HTML/CSS bulletin-board content -->
+    <div id="bulletin-board-layer">
+      <!-- A tiny cinematic HUD element -->
+      <div id="hud-hint">SCROLL TO EXPLORE</div>
+
+      <!-- The physical anchor of the bulletin board -->
+      <div class="board-anchor">
+        
+        <!-- PAPER 1: LEETCODE -->
+        <div class="paper-card" id="paper-1">
+          <div class="paper-title">LEETCODE</div>
+          <div class="paper-achievement">800+</div>
+          <div class="paper-desc">Problems Solved</div>
+          <div class="paper-text">
+            Consistently solving algorithm and data-structure problems across a wide range of difficulties, focusing on problem-solving, optimization, and competitive programming fundamentals.
+          </div>
+          <div class="pin"></div>
+        </div>
+
+        <!-- PAPER 2: FINSPARK -->
+        <div class="paper-card" id="paper-2">
+          <div class="paper-title">FINSPARK</div>
+          <div class="paper-subtitle">National Hackathon Finalist</div>
+          <div class="paper-achievement">FINALIST</div>
+          <div class="paper-desc">Bank of Maharashtra • Pune</div>
+          <div class="paper-text">
+            Represented my team at the FINSPARK hackathon organized by the Bank of Maharashtra in Pune, where we presented our AI-powered financial fraud correlation platform.
+          </div>
+          <div class="paper-footer">Team Ninja Turtles • Presented & Pitched</div>
+          <div class="pin"></div>
+        </div>
+
+        <!-- PAPER 3: SPRINT4GOOD -->
+        <div class="paper-card" id="paper-3">
+          <div class="paper-title">SPRINT4GOOD</div>
+          <div class="paper-subtitle">AI Hackathon — IIT Delhi</div>
+          <div class="paper-achievement">NATIONAL-LEVEL FINALIST</div>
+          <div class="paper-text">
+            Selected as a finalist in the SPRINT4GOOD AI Hackathon and presented an AI-focused solution at the national-level event hosted at IIT Delhi.
+          </div>
+          <div class="pin"></div>
+        </div>
+
+        <!-- PAPER 4: AGENTIC BNB -->
+        <div class="paper-card" id="paper-4">
+          <div class="paper-title">AGENTIC BNB</div>
+          <div class="paper-subtitle">Hackathon Winner</div>
+          <div class="paper-achievement highlight-win">WINNER</div>
+          <div class="paper-text">
+            Built and presented an agentic AI solution that won the Agentic BNB Hackathon.
+          </div>
+          <div class="pin"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LAYER 3: Interactive HTML/CSS Book content -->
+    <div id="book-layer">
+      <div id="book-top-bg"></div>
+      
+      <div class="book-anchor">
+        <!-- SPREAD 1 -->
+        <div class="book-spread" id="spread-1">
+          <div class="book-page left-page">
+            <div class="page-title">EXPERIENCE</div>
+            <div class="page-subtitle">Where I learned by building</div>
+            <div class="page-section">
+              <div class="section-title">Java Development Intern — Codec Technologies</div>
+              <div class="section-subtitle">June 2024 – July 2024</div>
+              <ul class="section-list">
+                <li>Built Java applications using OOP, collections and exception handling.</li>
+                <li>Worked with JDBC and MySQL for persistent storage.</li>
+                <li>Implemented backend authentication and data management.</li>
+              </ul>
+            </div>
+            <div class="divider"></div>
+            <div class="page-section">
+              <div class="section-title">Virtual Intern — Finance on AWS</div>
+              <div class="section-subtitle">AWS Academy<br>2024</div>
+              <ul class="section-list">
+                <li>Worked with AWS EC2, S3 and IAM.</li>
+                <li>Explored cloud infrastructure and cost optimization concepts in a finance-oriented environment.</li>
+              </ul>
+            </div>
+            <div class="page-number">2</div>
+          </div>
+          
+          <div class="book-page right-page">
+            <div class="page-title">TECHNICAL SKILLS</div>
+            <div class="page-subtitle">The tools I build with</div>
+            <div class="page-section">
+              <div class="section-title">PROGRAMMING</div>
+              <div class="section-text">Python, Java, JavaScript</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">BACKEND</div>
+              <div class="section-text">Flask, REST APIs, JDBC. Building applications and database-connected systems.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">AI / ML & PROBLEM SOLVING</div>
+              <div class="section-text">Focused on Data Structures & Algorithms. Building AI-driven applications through projects and hackathons.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">DATABASES & CLOUD</div>
+              <div class="section-text">MySQL, AWS (EC2, S3, IAM), Git, GitHub.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">CORE</div>
+              <div class="section-text">Object-Oriented Programming, System Design Basics</div>
+            </div>
+            <div class="page-number">3</div>
+          </div>
+        </div>
+
+        <!-- SPREAD 2 -->
+        <div class="book-spread" id="spread-2">
+          <div class="book-page left-page">
+            <div class="page-title">TEAMWORK</div>
+            <div class="page-subtitle">Build together. Learn together.</div>
+            <div class="page-section">
+              <div class="section-title">COLLABORATION</div>
+              <div class="section-text">Working with teammates to turn ideas into functional prototypes.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">COMMUNICATION</div>
+              <div class="section-text">Sharing technical ideas, discussing approaches and contributing during presentations.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">OWNERSHIP</div>
+              <div class="section-text">Taking responsibility for technical work and helping move projects forward.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">ADAPTABILITY</div>
+              <div class="section-text">Working effectively under hackathon deadlines, changing requirements and limited development time.</div>
+            </div>
+            <div class="page-number">4</div>
+          </div>
+          
+          <div class="book-page right-page">
+            <div class="page-title">MY ROLE</div>
+            <div class="page-subtitle">More than just writing code</div>
+            <div class="page-section">
+              <div class="section-title">BUILDER</div>
+              <div class="section-text">Turning ideas into working applications and prototypes.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">PROBLEM SOLVER</div>
+              <div class="section-text">Breaking complex problems into smaller, practical technical solutions.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">HACKATHON CONTRIBUTOR</div>
+              <div class="section-text">Designing, building and presenting solutions under time constraints.</div>
+            </div>
+            <div class="page-section">
+              <div class="section-title">CONTINUOUS LEARNER</div>
+              <div class="section-text">Improving through projects, competitive programming and technical exploration.</div>
+            </div>
+            <div class="page-number">5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The scrollable space -->
+    <div id="scroll-spacer"></div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

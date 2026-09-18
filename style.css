@@ -1,0 +1,386 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  overflow-x: hidden;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#cinematic-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+}
+
+#scroll-spacer {
+  width: 100%;
+}
+
+/* --- LAYER 2: BULLETIN BOARD --- */
+#bulletin-board-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#hud-hint {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+}
+
+/* Board Anchor matches physical space roughly */
+.board-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90vw;
+  max-width: 1200px;
+  height: 80vh;
+  max-height: 800px;
+  transform: translate(-50%, -50%);
+}
+
+.paper-card {
+  position: absolute;
+  background-color: #dcb37b;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(139, 69, 19, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 80% 90%, rgba(139, 69, 19, 0.08) 0%, transparent 30%);
+  box-shadow: 
+    2px 4px 15px rgba(0,0,0,0.4), 
+    inset 0 0 40px rgba(139, 69, 19, 0.2);
+  border-radius: 4px 6px 3px 5px;
+  padding: 30px;
+  color: #3b2a1a;
+  opacity: 0; /* Hidden by default */
+  will-change: transform, opacity;
+}
+
+.paper-card::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #2a2a2a;
+  border-radius: 50%;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.5), inset -1px -1px 2px rgba(255,255,255,0.3);
+}
+
+.paper-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  letter-spacing: 0.05em;
+  text-align: center;
+  border-bottom: 1px solid rgba(59, 42, 26, 0.3);
+  padding-bottom: 10px;
+}
+
+.paper-achievement {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 15px 0;
+  color: #5c1818;
+}
+.paper-achievement.highlight-win {
+  font-size: 3.5rem;
+  color: #8b0000;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+}
+
+.paper-subtitle {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.paper-desc {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.paper-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.paper-footer {
+  margin-top: 15px;
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* Individual Paper Positions */
+#paper-1 {
+  top: 10%;
+  left: 5%;
+  width: 320px;
+}
+#paper-2 {
+  top: 15%;
+  right: 5%;
+  width: 350px;
+}
+#paper-3 {
+  bottom: 10%;
+  left: 10%;
+  width: 330px;
+}
+#paper-4 {
+  bottom: 5%;
+  right: 15%;
+  width: 360px;
+}
+
+@media (max-width: 768px) {
+  #paper-1, #paper-2, #paper-3, #paper-4 {
+    width: 280px;
+    padding: 20px;
+  }
+  .paper-achievement { font-size: 2.2rem; }
+  .paper-title { font-size: 1.2rem; }
+  
+  #paper-1 { top: 5%; left: 5%; }
+  #paper-2 { top: 30%; right: 5%; }
+  #paper-3 { top: 55%; left: 5%; }
+  #paper-4 { top: 80%; right: 5%; }
+}
+
+/* --- LAYER 3: BOOK LAYER --- */
+#book-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#book-top-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/book_top.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0; /* Hidden by default, faded in by JS */
+  will-change: opacity;
+  z-index: 0;
+}
+
+.book-anchor {
+  position: absolute;
+  /* Matches the text bounds within the physical pages of book_top.jpg */
+  top: 52%;
+  left: 50%;
+  width: 82vw;
+  max-width: 1100px;
+  height: 70vh;
+  max-height: 800px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.book-spread {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.book-page {
+  width: 50%;
+  height: 100%;
+  padding: 50px 70px;
+  /* NO BACKGROUND COLOR - Text sits directly on the generated background image */
+  color: #3b2a1a; /* Dark brown ink */
+  font-family: "Georgia", "Times New Roman", serif;
+  display: flex;
+  flex-direction: column;
+  mix-blend-mode: multiply; /* Blends ink perfectly with the video book texture */
+  position: relative;
+  /* Outer elegant border */
+  border: 1px solid rgba(59, 42, 26, 0.4);
+}
+
+/* Inner ornate borders matching reference image */
+.book-page::before {
+  content: "";
+  position: absolute;
+  top: 10px; left: 10px; right: 10px; bottom: 10px;
+  border: 2px solid rgba(59, 42, 26, 0.7);
+  pointer-events: none;
+}
+.book-page::after {
+  content: "";
+  position: absolute;
+  top: 15px; left: 15px; right: 15px; bottom: 15px;
+  border: 1px solid rgba(59, 42, 26, 0.3);
+  pointer-events: none;
+}
+
+/* Ensure the pages are perfectly flat for the top-down view */
+.left-page {
+  padding-right: 80px; /* More padding near the spine */
+}
+.right-page {
+  padding-left: 80px; /* More padding near the spine */
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.1em;
+  margin-bottom: 5px;
+  padding-bottom: 15px;
+  position: relative;
+}
+
+.page-title::after {
+  content: "✧";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: rgba(59, 42, 26, 0.6);
+}
+
+.page-subtitle {
+  text-align: center;
+  font-style: italic;
+  font-size: 1rem;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  color: #5d4037;
+}
+
+.page-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 5px;
+  color: #5d4037;
+}
+
+.section-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.section-list {
+  padding-left: 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.section-list li {
+  margin-bottom: 5px;
+}
+
+.divider {
+  text-align: center;
+  margin: 15px 0;
+  color: rgba(62, 39, 35, 0.4);
+}
+.divider::before {
+  content: "• ~ • ~ •";
+}
+
+.page-number {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: rgba(62, 39, 35, 0.6);
+}
+
+/* Typing effect word class */
+.word {
+  opacity: 0; /* Hidden by default, JS will reveal it */
+  will-change: opacity;
+}
+
+@media (max-width: 768px) {
+  .book-anchor {
+    width: 95vw;
+    height: 85vh;
+  }
+  .book-spread {
+    flex-direction: column;
+  }
+  .book-page {
+    width: 100%;
+    height: 50%;
+    padding: 20px;
+    transform: none;
+  }
+  .page-title {
+    font-size: 1.4rem;
+  }
+  .section-title {
+    font-size: 0.95rem;
+  }
+  .section-text, .section-list {
+    font-size: 0.85rem;
+  }
+}
