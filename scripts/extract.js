@@ -14,7 +14,9 @@ const videos = [
   'Wooden_door_opens_to_interior_20260917173445.mp4',
   'Camera_moving_through_rustic_cabin_20260917173457.mp4',
   'Camera_panning_toward_empty_bull…_20260917220917.mp4',
-  'Camera_panning_away_from_board_20260917224433.mp4'
+  'Camera_panning_away_from_board_20260917224433.mp4',
+  'Camera_panning_living_room_cabin_20260919142031.mp4',
+  'Camera_revealing_vintage_compute…_20260919150412.mp4'
 ];
 
 if (!fs.existsSync(framesDir)) {

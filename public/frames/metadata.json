@@ -29,6 +29,16 @@
       "seqIndex": 5,
       "frameCount": 240,
       "name": "seq5"
+    },
+    {
+      "seqIndex": 6,
+      "frameCount": 240,
+      "name": "seq6"
+    },
+    {
+      "seqIndex": 7,
+      "frameCount": 240,
+      "name": "seq7"
     }
   ]
 }
