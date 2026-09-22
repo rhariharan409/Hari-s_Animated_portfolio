@@ -131,8 +131,7 @@ async function init() {
   const sequences = metadata.sequences;
   const frameManager = new FrameManager(sequences);
   let isPlaying = true;
-  // Increase segmentCount to handle virtual book spreads, staircase, and the new computer video
-  const segmentCount = 20; 
+  const segmentCount = 22; 
   const segmentSize = 1 / segmentCount;
 
   // 2. Setup Scroll space
@@ -161,8 +160,28 @@ async function init() {
 
   const spreads = [
     document.getElementById('spread-1'),
-    document.getElementById('spread-2')
+    document.getElementById('spread-2'),
+    document.getElementById('spread-3'),
+    document.getElementById('spread-4')
   ];
+
+  // Cinematic Typography DOM Elements
+  const cineLayer = document.getElementById('cinematic-typography-layer');
+  const cineScenes = [
+    document.getElementById('cine-scene-1'),
+    document.getElementById('cine-scene-2'),
+    document.getElementById('cine-scene-3'),
+    document.getElementById('cine-scene-4'),
+    document.getElementById('cine-scene-5'),
+    document.getElementById('cine-scene-6'),
+    document.getElementById('cine-scene-7'),
+    document.getElementById('cine-scene-attic-1'),
+    document.getElementById('cine-scene-attic-2'),
+    document.getElementById('cine-scene-attic-3')
+  ];
+  const cineCgpaNum = document.getElementById('cine-cgpa-num');
+  const cineProbsNum = document.getElementById('cine-probs-num');
+  const cineMaskReveal = document.querySelector('.cine-mask-reveal');
 
   // Wrap text in words for the typing effect
   function wrapWords(element) {
@@ -208,6 +227,11 @@ async function init() {
 
   // Helper for fast interpolation
   const lerp = (start, end, progress) => start + (end - start) * progress;
+  const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+  const smoothstep = (min, max, value) => {
+    let x = clamp((value - min) / (max - min), 0, 1);
+    return x * x * (3 - 2 * x);
+  };
 
   // Helper for object-fit: cover drawing
   function drawImageCover(img) {
@@ -216,8 +240,8 @@ async function init() {
     // Use cover logic: take the max scale
     let scale = Math.max(scaleX, scaleY);
     
-    // Zoom in by 6% to completely crop out the Gemini watermark at the edges
-    scale *= 1.06;
+    // Zoom in by 15% to completely push the bottom-right corner out of the canvas bounds
+    scale *= 1.15;
 
     let renderWidth = img.width * scale;
     let renderHeight = img.height * scale;
@@ -252,21 +276,34 @@ async function init() {
     } else if (targetSeqIndex === 5) {
       videoSeqIndex = 5;
       videoProgress = Math.min(1, segmentProgress / 0.65);
-    } else if (targetSeqIndex === 6 || targetSeqIndex === 7) {
+    } else if (targetSeqIndex >= 6 && targetSeqIndex <= 9) {
       videoSeqIndex = 5;
       videoProgress = 1.0;
-    } else if (targetSeqIndex >= 8 && targetSeqIndex <= 14) {
+    } else if (targetSeqIndex >= 10 && targetSeqIndex <= 16) {
       videoSeqIndex = 6;
-      // Map global progress for segments 8 to 14 entirely to seq6 video progress
-      const staircaseSegmentsStart = 8 * segmentSize;
+      // Map global progress for segments 10 to 16 to seq6 video progress
+      const staircaseSegmentsStart = 10 * segmentSize;
       const staircaseSegmentsLength = 7 * segmentSize;
       let staircaseProgress = (globalProgress - staircaseSegmentsStart) / staircaseSegmentsLength;
       staircaseProgress = Math.max(0, Math.min(1, staircaseProgress));
-      videoProgress = staircaseProgress;
+      
+      // The first 55% of seq 6 is the camera panning across the living room to the stairs.
+      // To prevent sluggishness ("lag"), we compress this panning into a shorter scroll phase (1.5 segments).
+      const panRatio = 1.5 / 7;
+      if (staircaseProgress < panRatio) {
+        let panProgress = staircaseProgress / panRatio;
+        // Apply smoothstep for a cinematic ease-in-out pan
+        let smoothPan = panProgress * panProgress * (3 - 2 * panProgress);
+        videoProgress = smoothPan * 0.55;
+      } else {
+        // Map the remaining scroll space to the actual stair climb
+        let climbProgress = (staircaseProgress - panRatio) / (1 - panRatio);
+        videoProgress = 0.55 + (climbProgress * 0.45);
+      }
     } else {
       videoSeqIndex = 7;
-      // Map global progress for segments 15 to 19 to seq7 video progress
-      const computerSegmentsStart = 15 * segmentSize;
+      // Map global progress for segments 17 to 21 to seq7 video progress
+      const computerSegmentsStart = 17 * segmentSize;
       const computerSegmentsLength = 5 * segmentSize;
       let computerProgress = (globalProgress - computerSegmentsStart) / computerSegmentsLength;
       computerProgress = Math.max(0, Math.min(1, computerProgress));
@@ -296,6 +333,181 @@ async function init() {
       // Fallback: If the exact frame isn't loaded yet (scrolling too fast),
       // we do NOT clear the canvas. We just leave the last rendered frame visible
       // until the correct one finishes loading, which prevents black flashes.
+    }
+
+    // --- CINEMATIC TYPOGRAPHY LOGIC ---
+    if (cineLayer) {
+      cineLayer.style.pointerEvents = 'none'; // Ensure it's non-interactive
+      
+      const animateScene = (sceneIndex, startP, endP, enterExitRatio = 0.3) => {
+        const scene = cineScenes[sceneIndex];
+        if (!scene) return 0;
+        
+        if (globalProgress <= startP || globalProgress >= endP) {
+          scene.style.opacity = 0;
+          scene.style.visibility = 'hidden';
+          return 0;
+        }
+        
+        scene.style.visibility = 'visible';
+        const duration = endP - startP;
+        const enterEnd = startP + (duration * enterExitRatio);
+        const exitStart = endP - (duration * enterExitRatio);
+        
+        let opacity = 1;
+        let translateY = 0;
+        let scale = 1;
+        let blur = 0;
+        let progress = 1; 
+        
+        if (globalProgress < enterEnd) {
+          // Entering
+          progress = smoothstep(startP, enterEnd, globalProgress);
+          opacity = progress;
+          translateY = lerp(18, 0, progress);
+          scale = lerp(0.97, 1, progress);
+          blur = lerp(4, 0, progress);
+        } else if (globalProgress > exitStart) {
+          // Exiting
+          const p = smoothstep(exitStart, endP, globalProgress);
+          progress = 1 - p;
+          opacity = 1 - p;
+          translateY = lerp(0, -15, p);
+          scale = lerp(1, 0.985, p);
+          blur = lerp(0, 3, p);
+        }
+        
+        scene.style.opacity = opacity;
+        scene.style.transform = `translateY(${translateY}px) scale(${scale})`;
+        scene.style.filter = blur > 0 ? `blur(${blur}px)` : 'none';
+        
+        return progress; 
+      };
+
+      if (globalProgress <= 0.25) {
+        animateScene(0, 0.000, 0.035);
+        animateScene(1, 0.025, 0.065);
+        animateScene(2, 0.055, 0.095);
+        
+        // Scene 4 (9.48 CGPA)
+        animateScene(3, 0.085, 0.125);
+        if (globalProgress >= 0.085 && globalProgress <= 0.125 && cineCgpaNum) {
+          const p = clamp((globalProgress - 0.09) / 0.02, 0, 1);
+          if (p < 0.25) cineCgpaNum.textContent = "9";
+          else if (p < 0.5) cineCgpaNum.textContent = "9.";
+          else if (p < 0.75) cineCgpaNum.textContent = "9.4";
+          else cineCgpaNum.textContent = "9.48";
+        }
+        
+        // Scene 5 (800+)
+        const p5 = animateScene(4, 0.115, 0.150);
+        if (p5 > 0) {
+          const scene5 = cineScenes[4];
+          if (scene5) {
+            const labels = scene5.querySelectorAll('.cine-label, .cine-subtext');
+            labels.forEach((el) => {
+              // Fade them in a bit after the number, but fade out simultaneously
+              let innerP = clamp((p5 - 0.3) / 0.7, 0, 1);
+              el.style.opacity = globalProgress < 0.1325 ? innerP : p5; 
+            });
+          }
+          if (cineProbsNum) {
+            const pNum = clamp((globalProgress - 0.115) / 0.015, 0, 1);
+            if (pNum < 0.8) cineProbsNum.textContent = "800";
+            else cineProbsNum.textContent = "800+";
+          }
+        }
+        
+        // Scene 6 (Hackathon)
+        const p6 = animateScene(5, 0.140, 0.175);
+        if (p6 > 0 && cineMaskReveal) {
+          // Reveal clip-path during the entrance
+          const revealP = clamp((globalProgress - 0.145) / 0.012, 0, 1);
+          const revealPct = lerp(100, 0, smoothstep(0, 1, revealP));
+          cineMaskReveal.style.clipPath = `inset(0 ${revealPct}% 0 0)`;
+          
+          // Finspark line fades in after
+          const finspark = cineScenes[5].querySelector('.cine-subtext');
+          if (finspark) {
+            let finP = clamp((p6 - 0.4) / 0.6, 0, 1);
+            finspark.style.opacity = globalProgress < 0.1575 ? finP : p6;
+          }
+        }
+        
+        // Scene 7 (Final Statement)
+        const p7 = animateScene(6, 0.165, 0.195, 0.20); 
+        if (p7 > 0) {
+          const line2 = cineScenes[6].querySelector('.cine-statement-2');
+          if (line2) {
+            let innerP = clamp((p7 - 0.4) / 0.6, 0, 1);
+            line2.style.opacity = globalProgress < 0.180 ? innerP : p7;
+            // Subtly move it up slightly as it reveals
+            line2.style.transform = `translateY(${lerp(10, 0, innerP)}px)`;
+          }
+        }
+      } else if (globalProgress >= 0.77) {
+        // Attic approach sequence (targetSeqIndex 17 to 21)
+        const startP = 17 * (1 / 22); // ~0.7727
+        const length = 5 * (1 / 22);  // ~0.2272
+        const localP = clamp((globalProgress - startP) / length, 0, 1);
+
+        // Make sure the parent containers are visible so we can animate their children
+        if (cineScenes[7]) { cineScenes[7].style.opacity = 1; cineScenes[7].style.visibility = 'visible'; }
+        if (cineScenes[8]) { cineScenes[8].style.opacity = 1; cineScenes[8].style.visibility = 'visible'; }
+        if (cineScenes[9]) { cineScenes[9].style.opacity = 1; cineScenes[9].style.visibility = 'visible'; }
+
+        const animateAtticElement = (selector, enterStart, enterEnd, exitStart, exitEnd, startY = 25, startBlur = 6) => {
+          const el = document.querySelector(selector);
+          if (!el) return;
+          
+          if (localP <= enterStart || localP >= exitEnd) {
+            el.style.opacity = 0;
+            el.style.visibility = 'hidden';
+            return;
+          }
+          
+          el.style.visibility = 'visible';
+          let opacity = 1;
+          let translateY = 0;
+          let blur = 0;
+          
+          if (localP < enterEnd) {
+            const t = smoothstep(enterStart, enterEnd, localP);
+            opacity = t;
+            translateY = lerp(startY, 0, t);
+            blur = lerp(startBlur, 0, t);
+          } else if (localP > exitStart) {
+            const t = smoothstep(exitStart, exitEnd, localP);
+            opacity = 1 - t;
+            translateY = lerp(0, -15, t);
+            blur = lerp(0, startBlur, t);
+          }
+          
+          el.style.opacity = opacity;
+          el.style.transform = `translateY(${translateY}px)`;
+          el.style.filter = blur > 0 ? `blur(${blur}px)` : 'none';
+        };
+
+        // 0%–35% First Group
+        animateAtticElement('#attic-freelancer', 0.00, 0.10, 0.25, 0.35, 25, 6);
+        animateAtticElement('#attic-webdev',     0.05, 0.20, 0.25, 0.35, 15, 4);
+        
+        // 25%–55% Second Group
+        animateAtticElement('#attic-aidev',      0.25, 0.35, 0.45, 0.55, 25, 6);
+        animateAtticElement('#attic-aibuild',    0.30, 0.40, 0.45, 0.55, 15, 4);
+        
+        // 45%–75% Third Group (Fully gone before reaching the PC)
+        animateAtticElement('#attic-open',       0.45, 0.55, 0.65, 0.75, 25, 6);
+        animateAtticElement('#attic-collab',     0.50, 0.60, 0.65, 0.75, 15, 4);
+      } else {
+        // Not in any active cinematic zones, hide all
+        cineScenes.forEach(scene => {
+          if (scene) {
+            scene.style.opacity = 0;
+            scene.style.visibility = 'hidden';
+          }
+        });
+      }
     }
 
     // --- BULLETIN BOARD DOM INTERACTION ---
@@ -342,14 +554,6 @@ async function init() {
     const seq5Start = 5 * segmentSize;
     let seq5Progress = (globalProgress - seq5Start) / segmentSize;
     seq5Progress = Math.max(0, Math.min(1, seq5Progress));
-    
-    const seq6Start = 6 * segmentSize;
-    let seq6Progress = (globalProgress - seq6Start) / segmentSize;
-    seq6Progress = Math.max(0, Math.min(1, seq6Progress));
-    
-    const seq7Start = 7 * segmentSize;
-    let seq7Progress = (globalProgress - seq7Start) / segmentSize;
-    seq7Progress = Math.max(0, Math.min(1, seq7Progress));
 
     // Fade out bulletin board early in seq5
     if (seq5Progress > 0) {
@@ -362,15 +566,17 @@ async function init() {
 
     // Transition to the flat, top-down book background image
     const bookTopBg = document.getElementById('book-top-bg');
-    if (targetSeqIndex >= 5 && targetSeqIndex < 8 && seq5Progress > 0.65) {
+    if (targetSeqIndex >= 5 && targetSeqIndex <= 9 && seq5Progress > 0.65) {
       let easeFade = 1;
       if (targetSeqIndex === 5) {
         const fadeProgress = Math.max(0, Math.min(1, (seq5Progress - 0.65) / 0.30));
         easeFade = 1 - Math.pow(1 - fadeProgress, 3);
       }
-      if (targetSeqIndex === 7) {
-        // Fade out the book at the very end of segment 7 before segment 8 starts
-        const fadeOutProgress = Math.max(0, Math.min(1, (seq7Progress - 0.8) / 0.2));
+      if (targetSeqIndex === 9) {
+        const seq9Start = 9 * segmentSize;
+        const seq9Progress = Math.max(0, Math.min(1, (globalProgress - seq9Start) / segmentSize));
+        // Fade out the book at the very end of segment 9 before segment 10 (staircase) starts
+        const fadeOutProgress = Math.max(0, Math.min(1, (seq9Progress - 0.8) / 0.2));
         easeFade = 1 - fadeOutProgress;
       }
       if (bookTopBg) bookTopBg.style.opacity = easeFade;
@@ -378,7 +584,7 @@ async function init() {
       if (bookTopBg) bookTopBg.style.opacity = 0;
     }
 
-    if (spreadData[0] && spreadData[1]) {
+    if (spreadData && spreadData.length > 0) {
       // Helper to reveal words based on progress
       const applyTypingEffect = (words, progress) => {
         if (!words) return;
@@ -390,45 +596,50 @@ async function init() {
       };
 
       if (targetSeqIndex < 6) {
-        // Completely hidden while camera is moving and settling
-        spreadData[0].el.style.opacity = 0;
-        spreadData[1].el.style.opacity = 0;
-      } else if (targetSeqIndex === 6) {
-        // Spread 1 is visible
-        spreadData[0].el.style.opacity = 1;
-        spreadData[1].el.style.opacity = 0;
-        
-        // Right page (Tech Skills) types from 0% to 30% of seq6
-        const rightProgress = Math.max(0, Math.min(1, seq6Progress / 0.30));
-        applyTypingEffect(spreadData[0].rightWords, rightProgress);
-        
-        // Left page (Experience) types from 30% to 60% of seq6
-        const leftProgress = Math.max(0, Math.min(1, (seq6Progress - 0.30) / 0.30));
-        applyTypingEffect(spreadData[0].leftWords, leftProgress);
-      } else if (targetSeqIndex === 7) {
-        // Spread 2 is visible
-        
-        // Fade out Spread 1 from 0% to 20% of seq7
-        const fadeOutProgress = Math.max(0, Math.min(1, seq7Progress / 0.20));
-        spreadData[0].el.style.opacity = 1 - fadeOutProgress;
-        
-        let spread2Opacity = 1;
-        // Fade out Spread 2 in the last 20% of seq7
-        if (seq7Progress > 0.8) {
-          spread2Opacity = 1 - Math.max(0, Math.min(1, (seq7Progress - 0.8) / 0.2));
-        }
-        spreadData[1].el.style.opacity = spread2Opacity;
-        
-        // Right page (My Role) types from 20% to 50% of seq7
-        const rightProgress = Math.max(0, Math.min(1, (seq7Progress - 0.20) / 0.30));
-        applyTypingEffect(spreadData[1].rightWords, rightProgress);
-        
-        // Left page (Teamwork) types from 50% to 80% of seq7
-        const leftProgress = Math.max(0, Math.min(1, (seq7Progress - 0.50) / 0.30));
-        applyTypingEffect(spreadData[1].leftWords, leftProgress);
+        spreadData.forEach(spread => { if(spread) spread.el.style.opacity = 0; });
+      } else if (targetSeqIndex >= 6 && targetSeqIndex <= 9) {
+        spreadData.forEach((spread, index) => {
+          if (!spread) return;
+          const activeSegment = 6 + index;
+          
+          if (targetSeqIndex === activeSegment) {
+            spread.el.style.opacity = 1;
+            
+            const segStart = activeSegment * segmentSize;
+            const segProgress = Math.max(0, Math.min(1, (globalProgress - segStart) / segmentSize));
+            
+            // If it's the last spread, fade it out at the end of its segment
+            if (index === spreadData.length - 1 && segProgress > 0.8) {
+              spread.el.style.opacity = 1 - ((segProgress - 0.8) / 0.2);
+            }
+            
+            // Left page types from 10% to 40%
+            const leftProgress = Math.max(0, Math.min(1, (segProgress - 0.10) / 0.30));
+            applyTypingEffect(spread.leftWords, leftProgress);
+            
+            // Right page types from 40% to 70%
+            const rightProgress = Math.max(0, Math.min(1, (segProgress - 0.40) / 0.30));
+            applyTypingEffect(spread.rightWords, rightProgress);
+            
+          } else if (targetSeqIndex === activeSegment + 1) {
+            // Fade out the previous spread in the first 20% of the next segment
+            const nextSegStart = (activeSegment + 1) * segmentSize;
+            const nextSegProgress = Math.max(0, Math.min(1, (globalProgress - nextSegStart) / segmentSize));
+            
+            if (nextSegProgress < 0.20) {
+              spread.el.style.opacity = 1 - (nextSegProgress / 0.20);
+            } else {
+              spread.el.style.opacity = 0;
+            }
+            // Keep words fully visible while fading out
+            applyTypingEffect(spread.leftWords, 1);
+            applyTypingEffect(spread.rightWords, 1);
+          } else {
+            spread.el.style.opacity = 0;
+          }
+        });
       } else {
-        spreadData[0].el.style.opacity = 0;
-        spreadData[1].el.style.opacity = 0;
+        spreadData.forEach(spread => { if(spread) spread.el.style.opacity = 0; });
       }
     }
 

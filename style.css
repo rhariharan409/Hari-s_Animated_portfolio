@@ -1,4 +1,4 @@
-* {
+﻿* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -32,6 +32,234 @@ body {
   width: 100%;
 }
 
+/* --- LAYER 1.5: CINEMATIC TYPOGRAPHY --- */
+#cinematic-typography-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.cine-scene {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity, filter;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+/* Base typography */
+.cine-main-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(36px, 6vw, 76px);
+  letter-spacing: 0.08em;
+  color: #F4F0E6;
+}
+
+.cine-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1.5vw, 16px);
+  letter-spacing: 0.12em;
+  color: #D8D3C7;
+  margin-top: 10px;
+}
+
+.cine-sec-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: clamp(14px, 2vw, 24px);
+  letter-spacing: 0.08em;
+  color: #F4F0E6;
+}
+
+.cine-subtitle-sec {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: clamp(10px, 1.2vw, 14px);
+  color: #AFA99D;
+  margin-top: 5px;
+}
+
+.cine-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(54px, 8vw, 96px);
+  color: #F4F0E6;
+  line-height: 1;
+}
+
+.cine-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #AFA99D;
+  margin-top: 5px;
+}
+
+.cine-subtext {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: clamp(10px, 1.2vw, 12px);
+  color: #AFA99D;
+  margin-top: 5px;
+}
+
+.cine-label-long {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: clamp(10px, 1.5vw, 15px);
+  letter-spacing: 0.1em;
+  color: #D8D3C7;
+  margin-top: 10px;
+}
+
+.cine-statement-1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(24px, 3.5vw, 42px);
+  color: #F4F0E6;
+  margin-bottom: 5px;
+}
+
+.cine-statement-2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(32px, 5vw, 58px);
+  color: #F4F0E6;
+  position: relative;
+  display: inline-block;
+}
+
+.cine-accent-line {
+  width: 40px;
+  height: 1px;
+  background-color: #C8A96B;
+  margin-top: 10px;
+  opacity: 0.6;
+}
+
+.cine-accent-line-bottom {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #C8A96B;
+  opacity: 0.4;
+}
+
+.cine-mask-reveal {
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+}
+
+/* Scene specific positioning */
+#cine-scene-1 {
+  top: 45%;
+  left: 10%;
+  transform: translateY(-50%);
+}
+
+#cine-scene-2 {
+  bottom: 15%;
+  left: 10%;
+}
+
+#cine-scene-3 {
+  bottom: 20%;
+  left: 12%;
+}
+
+#cine-scene-4 {
+  top: 40%;
+  right: 15%;
+}
+
+#cine-scene-5 {
+  top: 35%;
+  left: 10%;
+}
+
+#cine-scene-6 {
+  bottom: 25%;
+  right: 10%;
+}
+
+#cine-scene-7 {
+  bottom: 20%;
+  left: 10%;
+}
+
+@media (max-width: 768px) {
+  /* On mobile, adjust positioning to avoid covering center */
+  #cine-scene-1 { top: 20%; left: 5%; }
+  #cine-scene-2 { bottom: 10%; left: 5%; }
+  #cine-scene-3 { top: 20%; left: 5%; }
+  #cine-scene-4 { top: 25%; right: 5%; }
+  #cine-scene-5 { top: 20%; left: 5%; }
+  #cine-scene-6 { bottom: 15%; right: 5%; }
+  #cine-scene-7 { top: 15%; left: 5%; }
+}
+
+/* --- Attic Sequence Typography --- */
+.attic-container {
+  width: auto;
+  height: auto;
+  bottom: auto;
+  right: auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+#cine-scene-attic-1 { top: 42vh; left: 12vw; }
+#cine-scene-attic-2 { top: 46vh; left: 14vw; }
+#cine-scene-attic-3 { top: 50vh; left: 12vw; }
+
+.attic-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(32px, 4vw, 56px);
+  color: #F4F0E6;
+  letter-spacing: 0.04em;
+  margin-bottom: 0;
+}
+
+.attic-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 1.2vw, 16px);
+  color: #D8D3C7;
+  letter-spacing: 0.08em;
+  margin-top: 16px;
+}
+
+.attic-heading-gold {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(36px, 4.5vw, 64px);
+  color: #C8A96B;
+  letter-spacing: 0.04em;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  #cine-scene-attic-1 { top: 35vh; left: 8vw; }
+  #cine-scene-attic-2 { top: 40vh; left: 10vw; }
+  #cine-scene-attic-3 { top: 45vh; left: 8vw; }
+  
+  /* Hide some supporting text on mobile if needed */
+  .cine-subtitle, .cine-subtitle-sec, .cine-subtext {
+    display: none;
+  }
+}
+
 /* --- LAYER 2: BULLETIN BOARD --- */
 #bulletin-board-layer {
   position: fixed;
@@ -39,7 +267,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 10;
+  z-index: 20;
   pointer-events: none;
 }
 
@@ -102,7 +330,6 @@ body {
 .paper-title {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 5px;
   letter-spacing: 0.05em;
   text-align: center;
   border-bottom: 1px solid rgba(59, 42, 26, 0.3);
@@ -240,16 +467,14 @@ body {
   height: 100%;
   padding: 4% 8%;
   /* NO BACKGROUND COLOR - Text sits directly on the generated background image */
-  color: #3b2a1a; /* Dark brown ink */
-  font-family: "Georgia", "Times New Roman", serif;
+  color: #4F4034; /* Dark brown ink */
+  font-family: 'Cormorant Garamond', serif;
   display: flex;
   flex-direction: column;
   mix-blend-mode: multiply; /* Blends ink perfectly with the video book texture */
   position: relative;
   container-type: size;
 }
-
-
 
 /* Ensure the pages are perfectly flat for the top-down view */
 .left-page {
@@ -259,142 +484,306 @@ body {
   padding-left: 12%; /* More padding near the spine */
 }
 
-.page-title {
-  font-size: clamp(24px, 7cqh, 50px);
-  font-weight: bold;
-  text-align: center;
-  letter-spacing: 0.15em;
-  margin-bottom: 0.5cqh;
-  padding-bottom: 1.5cqh;
-  position: relative;
+/* --- NEW BOOK TYPOGRAPHY & LAYOUTS --- */
+
+.book-heading {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(22px, 5.5cqh, 44px);
+  color: #1A110B;
+  margin-bottom: 1cqh;
   text-transform: uppercase;
 }
 
-.page-title::after {
-  content: "✧";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: clamp(12px, 3cqh, 24px);
-  color: rgba(59, 42, 26, 0.6);
-}
-
-.page-subtitle {
-  text-align: center;
+.book-subheading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
   font-style: italic;
-  font-size: clamp(16px, 3.5cqh, 28px);
-  margin-top: 0.5cqh;
-  margin-bottom: 3cqh;
-  color: #5d4037;
-}
-
-.page-section {
-  margin-bottom: 3cqh;
-}
-
-.role-title {
-  font-size: clamp(18px, 4cqh, 36px);
-  font-weight: bold;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5cqh;
-  text-transform: uppercase;
-}
-
-.role-company {
-  font-size: clamp(16px, 3cqh, 28px);
-  font-weight: bold;
-  color: #4a3325;
-  margin-bottom: 0.5cqh;
-}
-
-.role-date {
-  font-size: clamp(14px, 2.8cqh, 24px);
-  font-style: italic;
-  color: #5d4037;
+  font-size: clamp(15px, 3cqh, 24px);
+  color: #2A1B12;
   margin-bottom: 2cqh;
 }
 
-.section-title {
-  font-size: clamp(16px, 3.2cqh, 26px);
-  font-weight: bold;
-  margin-bottom: 0.5cqh;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.section-subtitle {
-  font-size: clamp(14px, 2.5cqh, 22px);
-  font-style: italic;
-  margin-bottom: 0.5cqh;
-  color: #5d4037;
-}
-
-.section-text {
-  font-size: clamp(14px, 2.5cqh, 22px);
+.book-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(13px, 2.2cqh, 18px);
   line-height: 1.5;
+  color: #1A110B;
+  margin-bottom: 1.5cqh;
 }
 
-.section-list {
-  padding-left: 5cqw;
-  font-size: clamp(14px, 2.5cqh, 22px);
-  line-height: 1.4;
-}
-
-.section-list li {
-  margin-bottom: 1.2cqh;
-}
-
-.divider {
-  text-align: center;
-  margin: 4cqh 0;
-  font-size: clamp(16px, 3.5cqh, 30px);
-  color: rgba(62, 39, 35, 0.4);
-}
-.divider::before {
-  content: "• ~ • ~ •";
-}
-
-.skills-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5cqh;
-}
-
-.skill-category {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5cqh;
-}
-
-.skill-category.compact {
-  gap: 0.2cqh;
-}
-
-.skill-title {
-  font-size: clamp(16px, 3cqh, 26px);
-  font-weight: bold;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.skill-items {
-  font-size: clamp(15px, 2.8cqh, 24px);
+.book-quote-bottom {
+  margin-top: auto;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
   font-style: italic;
-  color: #4a3325;
+  font-size: clamp(15px, 2.8cqh, 22px);
+  color: #1A110B;
+  text-align: center;
+  border-top: 1px solid rgba(26, 17, 11, 0.3);
+  padding-top: 1.5cqh;
+  margin-bottom: 1.5cqh;
 }
 
-.skill-desc {
-  font-size: clamp(14px, 2.5cqh, 22px);
-  line-height: 1.4;
+/* PAGE 1: Timeline Layout */
+.book-split-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 3cqw;
+  margin-top: 1.5cqh;
+}
+.book-split-left {
+  flex: 1.5;
+}
+.book-split-right {
+  flex: 1;
+  border-left: 1px solid rgba(26, 17, 11, 0.3);
+  padding-left: 2.5cqw;
+}
+.timeline-entry {
+  margin-bottom: 2cqh;
+}
+.timeline-year {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(11px, 1.8cqh, 15px);
+  color: #1A110B;
+  margin-bottom: 0.5cqh;
+}
+.timeline-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(13px, 2cqh, 17px);
+  color: #2A1B12;
+}
+
+/* PAGE 2: Builder Grid Layout */
+.builder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5cqh 3cqw;
+  margin-top: 0.5cqh;
+}
+.tech-section {
+  flex: 1 1 40%;
+  margin-bottom: 1cqh;
+}
+.tech-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(11px, 1.8cqh, 15px);
+  color: #1A110B;
+  margin-bottom: 0.5cqh;
+  border-bottom: 1px solid rgba(26, 17, 11, 0.3);
+  padding-bottom: 0.2cqh;
+  display: inline-block;
+}
+.tech-items {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(13px, 2cqh, 17px);
+  color: #2A1B12;
+}
+.proof-number-small {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(22px, 4cqh, 32px);
+  color: #1A110B;
+}
+
+/* PAGE 3: Project Layout */
+.project-entry {
+  margin-bottom: 2cqh;
+}
+.project-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(15px, 2.5cqh, 22px);
+  color: #1A110B;
+}
+.project-meta {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: clamp(9px, 1.3cqh, 11px);
+  letter-spacing: 0.1em;
+  color: #2A1B12;
+  margin-bottom: 0.5cqh;
+  margin-top: 0.5cqh;
+}
+.project-focus {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(13px, 2cqh, 16px);
+  color: #2A1B12;
+  margin-top: 0.5cqh;
+}
+
+/* PAGE 4: Challenge Layout */
+.challenge-steps {
+  margin-left: 2cqw;
+  margin-bottom: 2cqh;
+}
+.c-step {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(13px, 2.2cqh, 17px);
+  color: #1A110B;
+  margin-bottom: 0.5cqh;
+}
+.hackathon-entry {
+  border-left: 2px solid rgba(26, 17, 11, 0.4);
+  padding-left: 2cqw;
+  margin-bottom: 2cqh;
+}
+
+/* PAGE 5: Experience Layout */
+.experience-entry {
+  margin-bottom: 2cqh;
+  position: relative;
+  padding-left: 2.5cqw;
+}
+.experience-entry::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1cqh;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1A110B;
+}
+.exp-role {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(13px, 2.2cqh, 18px);
+  color: #1A110B;
+}
+.exp-company {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(15px, 2.5cqh, 20px);
+  color: #2A1B12;
+  margin-bottom: 0.2cqh;
+}
+.exp-tech {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: clamp(9px, 1.3cqh, 11px);
+  letter-spacing: 0.05em;
+  color: #2A1B12;
+  margin-bottom: 0.5cqh;
+}
+
+/* PAGE 6: Ledger Layout */
+.ledger-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1cqh;
+}
+.ledger-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px dotted rgba(26, 17, 11, 0.4);
+  padding-bottom: 1cqh;
+}
+.ledger-item:last-child {
+  border-bottom: none;
+}
+.proof-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(32px, 6.5cqh, 60px);
+  color: #1A110B;
+  line-height: 1;
+}
+.proof-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(11px, 1.8cqh, 15px);
+  color: #1A110B;
+  margin-top: 0.2cqh;
+  letter-spacing: 0.05em;
+}
+.proof-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(13px, 2cqh, 16px);
+  color: #2A1B12;
+  margin-top: 0.2cqh;
+}
+
+/* PAGE 7: Mindset Layout */
+.mindset-sequence {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 1cqh;
+}
+.m-step {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(13px, 2.2cqh, 17px);
+  color: #1A110B;
+}
+.m-arrow {
+  font-family: 'Cinzel', serif;
+  color: rgba(26, 17, 11, 0.6);
+  font-weight: 800;
+  font-size: clamp(15px, 2.5cqh, 22px);
+  margin: 0.2cqh 0;
+}
+
+/* PAGE 8: Next Chapter Layout */
+.final-chapter-content {
+  margin-bottom: 3cqh;
+}
+.future-list {
+  margin-top: 2cqh;
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(13px, 2.2cqh, 18px);
+  color: #2A1B12;
+  line-height: 1.8;
+  border-left: 1px solid rgba(26, 17, 11, 0.3);
+  padding-left: 2.5cqw;
+}
+.final-statement-container {
+  margin-top: auto;
+  margin-bottom: 8cqh;
+  text-align: center;
+}
+.final-statement {
+  font-family: 'Cinzel', serif;
+  font-weight: 800;
+  font-size: clamp(18px, 3.5cqh, 28px);
+  color: #1A110B;
+  margin-bottom: 0.5cqh;
+}
+.final-signature {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: clamp(10px, 1.5cqh, 13px);
+  letter-spacing: 0.2em;
+  color: rgba(26, 17, 11, 0.9);
 }
 
 .page-number {
-  margin-top: auto;
+  margin-top: auto; /* Fallback if no quote pushes it down */
   text-align: center;
-  font-size: 0.8rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(12px, 2cqh, 16px);
   font-style: italic;
-  color: rgba(62, 39, 35, 0.6);
+  color: rgba(26, 17, 11, 0.8);
 }
 
 /* Typing effect word class */
@@ -521,27 +910,215 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #ccc; /* Outer monitor casing */
   z-index: 20;
   opacity: 0;
   pointer-events: none;
   display: flex;
   flex-direction: column;
   transition: opacity 1s ease;
-  padding: 15px; /* Monitor bezel size */
 }
 
-/* Screen wrapper to mimic the display area */
-#screen-content {
+#desktop-environment {
   flex: 1;
-  background: #f4f4f0; /* Off-white vintage paper/plastic */
-  border: 4px solid #aaa;
-  border-radius: 10px; /* Slight curvature for CRT feel */
+  display: flex;
+  flex-direction: column;
+  background: url('/frames/seq0/frame_0001.webp') no-repeat center center; /* Fallback using a frame */
+  background-size: cover;
+  position: relative;
+  font-family: 'Courier New', Courier, monospace;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Add a semi-transparent dark overlay to the wallpaper for contrast */
+#desktop-environment::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 15, 25, 0.4);
+  z-index: 0;
+}
+
+/* All desktop content should sit above the overlay */
+.desktop-topbar, .desktop-workspace, .desktop-taskbar {
+  position: relative;
+  z-index: 1;
+}
+
+/* Top Bar */
+.desktop-topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: rgba(220, 220, 220, 0.85);
+  backdrop-filter: blur(10px);
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-bottom: 1px solid #999;
+}
+
+.topbar-right {
+  display: flex;
+  gap: 15px;
+}
+
+/* Main Workspace Area */
+.desktop-workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Left Sidebar */
+.desktop-sidebar {
+  width: 100px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.desktop-icon .icon-svg {
+  margin-bottom: 5px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.desktop-icon:hover {
+  transform: scale(1.1);
+}
+
+/* OS Window */
+.os-window {
+  margin: 20px auto;
+  width: 85%;
+  max-width: 1400px;
+  background: #f4f4f0;
+  border: 2px solid #000;
+  box-shadow: 10px 10px 0 rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  height: 85%;
+  position: relative;
+  min-height: 0;
+}
+
+.window-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid #000;
+  background: rgba(220, 220, 220, 0.9);
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.window-tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.window-tab {
+  padding: 8px 15px;
+  border: 1px solid #000;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  font-size: 0.9rem;
+  background: #ddd;
+  cursor: pointer;
+}
+.window-tab.active {
+  background: #f4f4f0;
+  border-bottom: 1px solid #f4f4f0;
+  margin-bottom: -1px;
+  font-weight: bold;
+}
+.window-tab .close-tab {
+  margin-left: 10px;
+  color: #777;
+}
+
+.window-controls {
+  display: flex;
+  gap: 15px;
+  padding: 10px 20px;
+  font-weight: bold;
+}
+.close-btn {
+  color: #d00;
+  cursor: pointer;
+}
+
+/* Window Content (formerly screen-content) */
+.window-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family: 'Courier New', Courier, monospace; /* Retro font */
   color: #000;
+  min-height: 0;
+}
+
+/* Bottom Taskbar */
+.desktop-taskbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 20px;
+  background: rgba(220, 220, 220, 0.9);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid #999;
+  font-size: 0.9rem;
+  font-weight: bold;
+  align-items: center;
+}
+
+.taskbar-left {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.taskbar-brand {
+  margin-right: 20px;
+}
+.taskbar-item {
+  padding: 5px 15px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #999;
+  cursor: pointer;
+}
+.taskbar-item.active {
+  background: #fff;
+  border: 1px solid #000;
+}
+
+.taskbar-right {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.toggle-switch {
+  width: 30px;
+  height: 15px;
+  background: #000;
+  border-radius: 10px;
+  position: relative;
+}
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 11px; height: 11px;
+  background: #fff;
+  border-radius: 50%;
 }
 
 
@@ -579,6 +1156,7 @@ body {
 
 .nav-btn:hover, .nav-btn.active {
   color: #000;
+  border-bottom: 2px solid #000;
 }
 
 #close-archive-btn {
@@ -598,6 +1176,8 @@ body {
   overflow-y: auto;
   opacity: 0;
   animation: fadeIn 0.6s forwards;
+  min-height: 0;
+  box-sizing: border-box;
 }
 
 .archive-view.active {
@@ -630,9 +1210,28 @@ body {
 
 .archive-doors {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
   flex: 1;
+}
+
+.contact-link {
+  text-decoration: none;
+  color: #000;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 2px solid #000;
+  padding: 20px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  background: #fff;
+}
+
+.contact-link:hover {
+  background: #fdfdfd;
+  box-shadow: 4px 4px 0 #000;
+  transform: translate(-2px, -2px);
 }
 
 .door-card {
@@ -649,6 +1248,31 @@ body {
   background: #fdfdfd;
   box-shadow: 4px 4px 0 #000;
   transform: translate(-2px, -2px);
+}
+
+.contact-inline-card {
+  padding: 30px;
+}
+
+.inline-contacts {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inline-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+.inline-contact-item a {
+  color: #000;
+  text-decoration: none;
+}
+.inline-contact-item a:hover {
+  text-decoration: underline;
 }
 
 .door-number {
@@ -851,8 +1475,8 @@ body {
 
 /* Full Viewer */
 #cert-viewer-overlay {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   background: rgba(244, 244, 240, 0.95);
   backdrop-filter: blur(5px);
   z-index: 30;
@@ -989,4 +1613,37 @@ body {
     padding-top: 30px;
     flex: none;
   }
+}
+
+/* --- Floating Profile Logo --- */
+#profile-floating-logo-container {
+  position: fixed;
+  bottom: 45px;
+  right: 45px;
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0; /* backup if image transparent */
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#profile-floating-logo-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+}
+
+#profile-floating-logo-container img {
+  width: 125%; /* Scales the image up to crop out the grey background and inner white line */
+  height: 125%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
 }
